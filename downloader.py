@@ -1,4 +1,6 @@
 from yt_dlp import YoutubeDL
+import httpx
+from pathlib import Path
 
 
 def get_video_info(url: str):
@@ -34,3 +36,18 @@ def get_video_caption_url(video__info, language="en"):
 
     else:
         return None
+
+
+def download_caption(caption_url, output_dir):
+    # hitting the url 
+    response = httpx.get(caption_url)
+
+    print(response.status_code)
+
+    output_path = Path(output_dir) / "transcript.srt"
+    # writing the caption to a file
+    with open(output_path, "w", encoding="utf-8") as f:
+
+        f.write(response.text)
+        print(f"downloading caption is completed sucessfully!, see the file at {output_path}")
+        return output_path
