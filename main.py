@@ -1,5 +1,5 @@
 import argparse
-
+from downloader import get_video_info
 def parse_args():
     parser=argparse.ArgumentParser(
         description="Generate transcripts from youtube videos"
@@ -24,7 +24,8 @@ def main():
     print("youtube transriber")
     print ("url: ",args.url)
     print(" output dir :",args.output)
-
+    info=get_video_info(url=args.url)
+    print("information about the video: ",info)
 
 if __name__== "__main__":
     main()
