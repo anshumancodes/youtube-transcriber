@@ -1,3 +1,4 @@
+from pathlib import Path
 
 
 def parse_srt(output_path):
@@ -24,3 +25,12 @@ def parse_srt(output_path):
             segments.append(segment)
 
         return segments
+
+
+def save_text(segments, output_dir):
+
+    output_path = Path(output_dir) / "transcript.txt"
+    with open(output_path, "w", encoding="utf-8") as f:
+        for segment in segments:
+            f.write(segment.get("text") + "\n")
+    return output_path
