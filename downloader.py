@@ -25,9 +25,9 @@ def get_video_info(url: str):
 def get_video_caption_url(video__info, language="en"):
 
     caption_source = video__info["captions"] or video__info["auto_captions"]
-    if video__info["captions"]:
+    if caption_source:
         print(
-            f"Using {'manual' if video_info['captions'] else 'auto'} captions")
+            f"Using {'manual' if video__info['captions'] else 'auto'} captions")
         for caption in caption_source[language]:
             if caption["ext"] == "srt":
                 return caption["url"]
