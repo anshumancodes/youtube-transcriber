@@ -1,5 +1,5 @@
 import argparse
-from downloader import get_video_info , get_video_caption_url
+from downloader import get_video_info , get_video_caption_url , download_caption
 
 from pprint import pprint
 
@@ -38,6 +38,7 @@ def main():
     if not caption_url:
         print("no caption available")
     print("caption url :  ",caption_url)
+    caption=download_caption(caption_url=caption_url,output_dir=args.output)
 
 if __name__ == "__main__":
     main()
