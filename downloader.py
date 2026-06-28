@@ -33,4 +33,4 @@ def get_video_caption_url(video__info, language="en"):
                 return caption["url"]
 
     else:
-        return "No captions"
+        return None
