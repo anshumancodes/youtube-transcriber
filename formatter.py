@@ -1,5 +1,5 @@
 from pathlib import Path
-
+import json
 
 def parse_srt(output_path):
     with open(output_path, "r", encoding="utf-8") as f:
@@ -33,4 +33,13 @@ def save_text(segments, output_dir):
     with open(output_path, "w", encoding="utf-8") as f:
         for segment in segments:
             f.write(segment.get("text") + "\n")
+            rint(f"sucessfully created transcript.txt at {output_path}")
+    return output_path
+
+
+def save_json(segments,output_dir):
+    output_path=Path(output_dir)/"transcripts.json"
+    with open(output_path,"w",encoding="utf-8") as f:
+        json.dump(segments,f,indent=4,ensure_ascii=False)
+        print(f"sucessfully created transcript.json at {output_path}")
     return output_path
