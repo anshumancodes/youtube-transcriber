@@ -1,6 +1,7 @@
 import argparse
-from downloader import get_video_info, get_video_caption_url, download_caption
-from formatter import parse_srt, save_text ,save_json
+from downloader import get_video_info, get_video_caption_url, download_caption, download_video
+from formatter import parse_srt, save_text, save_json
+from audio import extract_audio
 from pprint import pprint
 
 
@@ -52,6 +53,12 @@ def main():
 
     # saving parsed srt segements's text in transcripts.json
     transcript_json = save_json(segments=segments, output_dir=args.output)
+
+    # will get downloaded video path
+    downloaded_video_path = download_caption(args.url, args.output)
+
+    # extracting  audio
+    extracted_audio = extract_audio(downloaded_video_path, args.output)
 
 
 if __name__ == "__main__":
