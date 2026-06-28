@@ -20,3 +20,19 @@ def get_video_info(url: str):
             "auto_captions": info.get("automatic_captions"),
         }
     return data
+
+
+def get_video_caption_url(video__info, language="en"):
+    if video__info["captions"]:
+        print("Manual captions available")
+        return video__info["captions"].keys()
+
+    elif video__info["auto_captions"]:
+        print("Auto captions available")
+        
+        for caption in video__info["auto_captions"][language]:
+            if caption["ext"] == "srt":
+                return caption["url"]
+
+    else:
+        return "No captions"
