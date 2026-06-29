@@ -28,65 +28,71 @@ def parse_args():
 def main():
     args = parse_args()
 
-    print("youtube transriber")
-    print("url: ", args.url)
-    print(" output dir :", args.output)
-
-    # getting video info from downloader get_video_info fucntion
-    video = get_video_info(url=args.url)
-
-   # getting captions url
-    caption_url = get_video_caption_url(video__info=video)
-
-    if not caption_url:
-        print("no caption available")
-        print("proceeding to fallback....")
-        # if captions or auto captions not found then will :
-
-        # will get downloaded video path
-        downloaded_video_path = download_video(args.url, args.output)
-
-        # extracting  audio
-        extracted_audio = extract_audio(downloaded_video_path, args.output)
-
-        # pass the audio to transcriber so it changes into segements
-
-        segments_from_transcriber = transcribe_audio(extracted_audio)
-
-        # saving to text
-        transcript_txt = save_text(
-            segments=segments_from_transcriber, output_dir=args.output)
-
-        # saving to json
-        transcript_json = save_json(
-            segments=segments_from_transcriber, output_dir=args.output)
-
-    print("caption url :  ", caption_url)
-    # downloading the caption from the caption url (in srt format)
-    srt_output_path = download_caption(
-        caption_url=caption_url, output_dir=args.output)
-
-    # then i will pass it to srt parser
-    # to parse the srt we are saving
-    segments = parse_srt(srt_output_path)
-
-    # saving parsed srt segements's text in transcripts.txt
-    transcript_txt = save_text(segments=segments, output_dir=args.output)
-
-    # saving parsed srt segements's text in transcripts.json
-    transcript_json = save_json(segments=segments, output_dir=args.output)
-
-    args = parse_args()
-
     print("youtube transcriber")
     print("url:", args.url)
     print("output dir:", args.output)
 
-    # Get video metadata
+    # getting video info from downloader get_video_info function
     video = get_video_info(url=args.url)
 
-    # Get caption URL (still fetched, but ignored for testing)
+    # getting captions url
     caption_url = get_video_caption_url(video__info=video)
+
+    if not caption_url:
+        print("No captions available.")
+        print("Proceeding to fallback pipeline...")
+
+        # if captions or auto captions not found then will:
+
+        # will get downloaded video path
+        downloaded_video_path = download_video(args.url, args.output)
+
+        # extracting audio
+        extracted_audio = extract_audio(
+            downloaded_video_path,
+            args.output
+        )
+
+        # pass the audio to transcriber so it changes into segments
+        segments_from_transcriber = transcribe_audio(extracted_audio)
+
+        # saving to text
+        transcript_txt = save_text(
+            segments=segments_from_transcriber,
+            output_dir=args.output,
+        )
+
+        # saving to json
+        transcript_json = save_json(
+            segments=segments_from_transcriber,
+            output_dir=args.output,
+        )
+
+    else:
+        print("captions are available, proceeding with normal pipeline")
+        print("caption url:", caption_url)
+
+        # downloading the caption from the caption url (in srt format)
+        srt_output_path = download_caption(
+            caption_url=caption_url,
+            output_dir=args.output,
+        )
+
+        # then i will pass it to srt parser
+        # to parse the srt we are saving
+        segments = parse_srt(srt_output_path)
+
+        # saving parsed srt segments's text in transcript.txt
+        transcript_txt = save_text(
+            segments=segments,
+            output_dir=args.output,
+        )
+
+        # saving parsed srt segments's text in transcript.json
+        transcript_json = save_json(
+            segments=segments,
+            output_dir=args.output,
+        )
 
 
 if __name__ == "__main__":
