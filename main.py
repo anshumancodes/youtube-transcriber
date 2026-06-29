@@ -3,6 +3,7 @@ from downloader import get_video_info, get_video_caption_url, download_caption, 
 from formatter import parse_srt, save_text, save_json
 from audio import extract_audio
 from pprint import pprint
+from transcriber import transcribe_audio
 
 
 def parse_args():
@@ -40,6 +41,27 @@ def main():
    # downloading the caption from the caption url (in srt format)
     if not caption_url:
         print("no caption available")
+        print("proceeding to fallback....")
+        # if captions or auto captions not found then will :
+
+        # will get downloaded video path
+        downloaded_video_path = download_caption(args.url, args.output)
+
+        # extracting  audio
+        extracted_audio = extract_audio(downloaded_video_path, args.output)
+
+        # pass the audio to transcriber so it changes into segements
+
+        segments_from_transcriber = transcribe_audio(extracted_audio)
+
+        # saving to text
+        transcript_txt = save_text(
+            segments=segments_from_transcriber, output_dir=args.output)
+
+        # saving to json
+        transcript_json = save_json(
+            segments=segments_from_transcriber, output_dir=args.output)
+
     print("caption url :  ", caption_url)
     srt_output_path = download_caption(
         caption_url=caption_url, output_dir=args.output)
@@ -53,12 +75,6 @@ def main():
 
     # saving parsed srt segements's text in transcripts.json
     transcript_json = save_json(segments=segments, output_dir=args.output)
-
-    # will get downloaded video path
-    downloaded_video_path = download_caption(args.url, args.output)
-
-    # extracting  audio
-    extracted_audio = extract_audio(downloaded_video_path, args.output)
 
 
 if __name__ == "__main__":
