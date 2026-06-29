@@ -88,49 +88,6 @@ def main():
     # Get caption URL (still fetched, but ignored for testing)
     caption_url = get_video_caption_url(video__info=video)
 
-    # ----------------------------
-    # TEMPORARY: Force fallback
-    # ----------------------------
-    if True:
-        print("Testing fallback pipeline...")
-
-        # Download video
-        downloaded_video_path = download_video(args.url, args.output)
-
-        # Extract audio
-        extracted_audio = extract_audio(
-            downloaded_video_path,
-            args.output
-        )
-
-        # Transcribe locally
-        segments = transcribe_audio(extracted_audio)
-
-    else:
-        print("Caption URL:", caption_url)
-
-        # Download captions
-        srt_output_path = download_caption(
-            caption_url=caption_url,
-            output_dir=args.output
-        )
-
-        # Parse SRT
-        segments = parse_srt(srt_output_path)
-
-    # Common output logic
-    transcript_txt = save_text(
-        segments=segments,
-        output_dir=args.output,
-    )
-
-    transcript_json = save_json(
-        segments=segments,
-        output_dir=args.output,
-    )
-
-    print("Done!")
-
 
 if __name__ == "__main__":
     main()
