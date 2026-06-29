@@ -15,7 +15,7 @@ def transcribe_audio(audio_path):
     # storing parsed sgement from whisper's sent segments here
     parsed_segments = []
 
-    for segment in whisper_segment:
+    for segment in whisper_segments:
         parsed_segments.append({
             "start": segment.start,
             "end": segment.end,
