@@ -38,14 +38,13 @@ def main():
    # getting captions url
     caption_url = get_video_caption_url(video__info=video)
 
-   # downloading the caption from the caption url (in srt format)
     if not caption_url:
         print("no caption available")
         print("proceeding to fallback....")
         # if captions or auto captions not found then will :
 
         # will get downloaded video path
-        downloaded_video_path = download_caption(args.url, args.output)
+        downloaded_video_path = download_video(args.url, args.output)
 
         # extracting  audio
         extracted_audio = extract_audio(downloaded_video_path, args.output)
@@ -63,6 +62,7 @@ def main():
             segments=segments_from_transcriber, output_dir=args.output)
 
     print("caption url :  ", caption_url)
+    # downloading the caption from the caption url (in srt format)
     srt_output_path = download_caption(
         caption_url=caption_url, output_dir=args.output)
 
@@ -75,6 +75,61 @@ def main():
 
     # saving parsed srt segements's text in transcripts.json
     transcript_json = save_json(segments=segments, output_dir=args.output)
+
+    args = parse_args()
+
+    print("youtube transcriber")
+    print("url:", args.url)
+    print("output dir:", args.output)
+
+    # Get video metadata
+    video = get_video_info(url=args.url)
+
+    # Get caption URL (still fetched, but ignored for testing)
+    caption_url = get_video_caption_url(video__info=video)
+
+    # ----------------------------
+    # TEMPORARY: Force fallback
+    # ----------------------------
+    if True:
+        print("Testing fallback pipeline...")
+
+        # Download video
+        downloaded_video_path = download_video(args.url, args.output)
+
+        # Extract audio
+        extracted_audio = extract_audio(
+            downloaded_video_path,
+            args.output
+        )
+
+        # Transcribe locally
+        segments = transcribe_audio(extracted_audio)
+
+    else:
+        print("Caption URL:", caption_url)
+
+        # Download captions
+        srt_output_path = download_caption(
+            caption_url=caption_url,
+            output_dir=args.output
+        )
+
+        # Parse SRT
+        segments = parse_srt(srt_output_path)
+
+    # Common output logic
+    transcript_txt = save_text(
+        segments=segments,
+        output_dir=args.output,
+    )
+
+    transcript_json = save_json(
+        segments=segments,
+        output_dir=args.output,
+    )
+
+    print("Done!")
 
 
 if __name__ == "__main__":
