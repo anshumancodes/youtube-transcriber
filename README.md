@@ -9,7 +9,7 @@ The pipeline begins by taking a YouTube URL and fetching the video's metadata to
 
 ### Tech stack
 
-python
-ffmpeg
-faster_whisper
-yt-dlp
+- python
+- ffmpeg
+- faster_whisper
+- yt-dlp
